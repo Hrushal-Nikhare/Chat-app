@@ -39,7 +39,15 @@ io.on("connection", (socket) => {
 		io.emit("Chat Says:", msg);
 	});
 
-    
+	socket.on("Join", (msg) => {
+		try {
+			fs.appendFileSync("log.txt", `${new Date()} ${msg} \n`);
+		} catch (err) {
+			console.error(err);
+		}
+		msg = profanity.censor(msg);
+		io.emit("Chat Says:", msg);
+	});
 });
 
 server.listen(3000, () => {

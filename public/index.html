@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Chat</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        if (!localStorage.getItem('Name')) {
+            localStorage.setItem('Name', prompt('What is your name?'));
+        }
+    </script>
 </head>
 
 <body>
@@ -14,6 +19,7 @@
         <input type="text" id="my_typa_stuff" name="input">
         <button type="soobmit">Submit</button>
     </form>
+    <script type="application/javascript" src="http://ipinfo.io/?format=jsonp&callback=getIP"></script>
     <script src="/socket.io/socket.io.js"></script> <!-- socket.io exposes the file somehow idk -->
     <script>
         const socket = io();
@@ -21,12 +27,9 @@
         const input = document.getElementById('my_typa_stuff');
         const messages = document.getElementById('mossages');
 
-        if (!localStorage.getItem('Name')) {
-            localStorage.setItem('Name', prompt('What is your name?'));
-        }
-
         const name = localStorage.getItem('Name');
-        
+        socket.emit('Join', `${name} has joined the chat`);
+
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -41,6 +44,7 @@
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
+
     </script>
 </body>
 
