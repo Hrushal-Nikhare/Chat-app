@@ -21,10 +21,17 @@
         const input = document.getElementById('my_typa_stuff');
         const messages = document.getElementById('mossages');
 
+        if (!localStorage.getItem('Name')) {
+            localStorage.setItem('Name', prompt('What is your name?'));
+        }
+
+        const name = localStorage.getItem('Name');
+        
+
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             if (input.value) {
-                socket.emit('Chat Says:', input.value);
+                socket.emit('Chat Says:', `${name}: ${input.value}`);
                 input.value = '';
             }
         });

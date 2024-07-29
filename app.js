@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
 	res.sendFile(join(__dirname, "public\\index.html"));
 });
 
-app.get('/style.css', (req, res) => {
-    res.sendFile(join(__dirname, 'public\\style.css'));
+app.get("/style.css", (req, res) => {
+	res.sendFile(join(__dirname, "public\\style.css"));
 });
 
 io.on("connection", (socket) => {
@@ -26,9 +26,7 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log("user disconnected");
 	});
-});
 
-io.on("connection", (socket) => {
 	socket.on("Chat Says:", (msg) => {
 		try {
 			fs.appendFileSync("log.txt", `${new Date()} ${msg} \n`);
@@ -40,6 +38,8 @@ io.on("connection", (socket) => {
 
 		io.emit("Chat Says:", msg);
 	});
+
+    
 });
 
 server.listen(3000, () => {
