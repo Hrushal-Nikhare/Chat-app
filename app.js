@@ -1,13 +1,40 @@
-const express = require('express');
-const { createServer } = require('node:http');
+const express = require("express");
+const { createServer } = require("node:http");
+const { join } = require("node:path");
+const { Server } = require("socket.io");
+const fs = require('node:fs');
 
 const app = express();
 const server = createServer(app);
+const io = new Server(server);
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>');
+// app.get('/', (req, res) => {
+//   res.send('<h1>Hello world</h1>');
+// });
+
+app.get("/", (req, res) => {
+	res.sendFile(join(__dirname, "public\\index.html"));
+});
+
+io.on("connection", (socket) => {
+	console.log("a user connected");
+	socket.on("disconnect", () => {
+		console.log("user disconnected");
+	});
+});
+
+io.on("connection", (socket) => {
+	socket.on("Chat Says:", (msg) => {
+        try {
+            fs.appendFileSync('log.txt', `${new Date()} ${msg} \n`);
+        }
+        catch (err) {
+            console.error(err);
+        }
+            io.emit('Chat Says:', msg);
+	});
 });
 
 server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
+	console.log("server running at http://localhost:3000");
 });

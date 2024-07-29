@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <ul id="mossages"></ul>
+    <form id="smth" action="">
+        <input type="text" id="my_typa_stuff" name="input">
+        <button type="soobmit">Submit</button>
+    </form>
     <script src="/socket.io/socket.io.js"></script> <!-- socket.io exposes the file somehow idk -->
-<script>
-  const socket = io();
-</script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('smth');
+        const input = document.getElementById('my_typa_stuff');
+        const messages = document.getElementById('mossages');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('Chat Says:', input.value);
+                input.value = '';
+            }
+        });
+        socket.on('Chat Says:', (msg) => {
+            const item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
 </body>
+
 </html>
