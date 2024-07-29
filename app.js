@@ -17,6 +17,10 @@ app.get("/", (req, res) => {
 	res.sendFile(join(__dirname, "public\\index.html"));
 });
 
+app.get('/style.css', (req, res) => {
+    res.sendFile(join(__dirname, 'public\\style.css'));
+});
+
 io.on("connection", (socket) => {
 	console.log("a user connected");
 	socket.on("disconnect", () => {
@@ -33,7 +37,7 @@ io.on("connection", (socket) => {
 		}
 
 		msg = profanity.censor(msg);
-        
+
 		io.emit("Chat Says:", msg);
 	});
 });
