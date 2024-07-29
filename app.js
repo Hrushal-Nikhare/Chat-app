@@ -2,7 +2,8 @@ const express = require("express");
 const { createServer } = require("node:http");
 const { join } = require("node:path");
 const { Server } = require("socket.io");
-const fs = require('node:fs');
+const fs = require("node:fs");
+const profanity = require("@2toad/profanity").profanity;
 
 const app = express();
 const server = createServer(app);
@@ -25,13 +26,15 @@ io.on("connection", (socket) => {
 
 io.on("connection", (socket) => {
 	socket.on("Chat Says:", (msg) => {
-        try {
-            fs.appendFileSync('log.txt', `${new Date()} ${msg} \n`);
-        }
-        catch (err) {
-            console.error(err);
-        }
-            io.emit('Chat Says:', msg);
+		try {
+			fs.appendFileSync("log.txt", `${new Date()} ${msg} \n`);
+		} catch (err) {
+			console.error(err);
+		}
+
+		msg = profanity.censor(msg);
+        
+		io.emit("Chat Says:", msg);
 	});
 });
 
